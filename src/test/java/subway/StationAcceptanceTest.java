@@ -60,7 +60,7 @@ public class StationAcceptanceTest extends ApiTest {
         // then: 생성되어 있는 2개의 지하철역 응답
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         List<String> stationNames = response.jsonPath().getList("name", String.class);
-        assertThat(stationNames).containsAnyOf(stationName1, stationName2);
+        assertThat(stationNames).contains(stationName1, stationName2);
     }
 
     /**
