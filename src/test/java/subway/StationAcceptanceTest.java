@@ -23,7 +23,7 @@ public class StationAcceptanceTest {
      * Then 지하철역이 생성된다
      * Then 지하철역 목록 조회 시 생성한 역을 찾을 수 있다
      */
-    @DisplayName("지하철역을 생성한다.")
+    @DisplayName("지하철역을 생성한다")
     @Test
     void createStation() {
         // when
@@ -55,13 +55,53 @@ public class StationAcceptanceTest {
      * When 지하철역 목록을 조회하면
      * Then 2개의 지하철역을 응답 받는다
      */
-    // TODO: 지하철역 목록 조회 인수 테스트 메서드 생성
+    @DisplayName("지하철역 목록을 조회한다")
+    @Test
+    void showStations() {
+        // given: 2개의 지하철역 생성
+        Map<String, String> params1 = new HashMap<>();
+        params1.put("name", "강남역");
+        Map<String, String> params2 = new HashMap<>();
+        params2.put("name", "역삼역");
+
+        RestAssured.given().log().all()
+                .body(params1)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/stations")
+                .then().log().all()
+                .extract();
+
+        RestAssured.given().log().all()
+                .body(params2)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/stations")
+                .then().log().all()
+                .extract();
+
+        // when: 지하철역 목록 조회
+        ExtractableResponse<Response> response = RestAssured
+                .given()
+                    .log().all()
+                .when()
+                    .get("/stations")
+                .then()
+                    .log().all().extract();
+
+        // then: 생성되어 있는 2개의 지하철역 응답
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        List<String> stationNames = response.jsonPath().getList("name", String.class);
+        assertThat(stationNames).containsAnyOf("강남역", "역삼역");
+    }
 
     /**
      * Given 지하철역을 생성하고
      * When 그 지하철역을 삭제하면
      * Then 그 지하철역 목록 조회 시 생성한 역을 찾을 수 없다
      */
-    // TODO: 지하철역 제거 인수 테스트 메서드 생성
+    @DisplayName("지하철역을 삭제한다")
+    @Test
+    void deleteStation() {
+        // TODO. implement
+    }
 
 }
