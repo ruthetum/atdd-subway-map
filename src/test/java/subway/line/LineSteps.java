@@ -10,8 +10,8 @@ public class LineSteps {
     public static CreateLineRequest 지하철_노선_생성_요청(
             String name,
             String color,
-            int upStationId,
-            int downStationId,
+            Long upStationId,
+            Long downStationId,
             int distance
     ) {
         return new CreateLineRequest(name, color, upStationId, downStationId, distance);
