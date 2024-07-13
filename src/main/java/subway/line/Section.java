@@ -3,6 +3,7 @@ package subway.line;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * 구간은 노선, 상행역, 하행역 정보를 조합했을 때 고유하다
@@ -81,6 +82,10 @@ public class Section {
 
     public int getDistance() {
         return distance;
+    }
+
+    public List<Long> getStationIds() {
+        return List.of(upStationId, downStationId);
     }
 
     public static Section create(Long lineId, Long upStationId, Long downStationId, int distance) {

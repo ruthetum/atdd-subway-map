@@ -8,6 +8,7 @@ import subway.station.StationRepository;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
@@ -65,5 +66,30 @@ public class LineService {
                     )
                 )
         );
+    }
+
+    /**
+     * TODO. 요구사항 수정될 수 있음. 연관관계 설정은 추후 진행, 이에 따른 조회 방법 수정 필요
+     */
+    public List<LineResponse> findAllLines() {
+        return lineRepository.findAll().stream()
+                .map(line -> {
+                    var sections = sectionRepository.findAllByLineId(line.getId());
+                    var stations = stationRepository.findAllById(
+                            sections.stream()
+                                    .flatMap(section -> section.getStationIds().stream())
+                                    .collect(Collectors.toList())
+                    );
+
+                    return new LineResponse(
+                            line.getId(),
+                            line.getName(),
+                            line.getColor(),
+                            stations.stream()
+                                    .map(station -> new LineResponse.StationDto(station.getId(), station.getName()))
+                                    .collect(Collectors.toList())
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }
