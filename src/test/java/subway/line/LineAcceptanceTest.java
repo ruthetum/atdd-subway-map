@@ -150,7 +150,17 @@ public class LineAcceptanceTest extends ApiTest {
     @DisplayName("지하철 노선을 삭제한다")
     @Test
     void deleteLine() {
-        // TODO: 지하철 노선 삭제
+        // given
+        var 신분당선 = 지하철_노선_상하행역_등록("신분당선", "bg-red-600");
+        var 신분당선_ID = 신분당선.getLeft();
+
+        // when
+        지하철_노선_삭제(신분당선_ID);
+
+        // then
+        var 지하철_노선_목록 = 지하철_노선_목록_조회();
+        var 지하철_노선_이름_목록 = 지하철_노선_목록.jsonPath().getList("name", String.class);
+        assertThat(지하철_노선_이름_목록).doesNotContain("신분당선");
     }
 
     /**
