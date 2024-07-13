@@ -1,7 +1,9 @@
 package subway.line;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import subway.ApiTest;
 
@@ -104,7 +106,19 @@ public class LineAcceptanceTest extends ApiTest {
     @DisplayName("지하철 노선을 조회한다")
     @Test
     void showLine() {
-        // TODO: 지하철 노선 조회
+        //given
+        var 신분당선 = 신분당선_등록("신분당선", "bg-red-600");
+        var 신분당선_ID = 신분당선.getLeft();
+        var 강남역_ID = 신분당선.getMiddle();
+        var 신논현역_ID = 신분당선.getRight();
+
+        // when
+        var 조회된_신분당선 = 지하철_노선_조회(신분당선_ID);
+
+        // then
+        assertThat(조회된_신분당선.statusCode()).isEqualTo(HttpStatus.OK.value());
+        var 등록된_신분당선 = 조회된_신분당선.jsonPath().getObject("", LineResponse.class);
+        등록된_노선_정보_확인(등록된_신분당선, "신분당선", "bg-red-600", 강남역_ID, 신논현역_ID);
     }
 
     /**
@@ -127,5 +141,19 @@ public class LineAcceptanceTest extends ApiTest {
     @Test
     void deleteLine() {
         // TODO: 지하철 노선 삭제
+    }
+
+    /**
+     * 지하철 노선과 노선 등록에 필요한 지하철역을 생성하는 메서드
+     * @return <노선 ID, 상행역 ID, 하행역 ID>
+     */
+    private Triple<Long, Long, Long> 신분당선_등록(String name, String color) {
+        var 상행역 = 지하철역_생성(지하철역_생성_요청("상행역"));
+        var 상행역_ID = 상행역.jsonPath().getLong("id");
+        var 하행역 = 지하철역_생성(지하철역_생성_요청("하행역"));
+        var 하행역_ID = 하행역.jsonPath().getLong("id");
+        var 지하철_노선 = 지하철_노선_생성_요청(name, color, 상행역_ID, 하행역_ID, 10);
+        var 지하철_노선_ID = 지하철_노선_생성(지하철_노선).jsonPath().getLong("id");
+        return Triple.of(지하철_노선_ID, 상행역_ID, 하행역_ID);
     }
 }
