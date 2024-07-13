@@ -1,4 +1,4 @@
-package subway;
+package subway.station;
 
 public class StationRequest {
     private final String name;

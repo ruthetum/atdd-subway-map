@@ -1,19 +1,12 @@
-package subway;
+package subway.station;
 
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import subway.ApiTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static subway.StationSteps.*;
+import static subway.station.StationSteps.*;
 
 @DisplayName("지하철역 관련 기능")
 public class StationAcceptanceTest extends ApiTest {
