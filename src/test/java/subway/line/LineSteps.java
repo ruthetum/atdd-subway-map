@@ -26,4 +26,12 @@ public class LineSteps {
                     .post("/lines")
                 .then().log().all().extract();
     }
+
+    public static ExtractableResponse<Response> 지하철_노선_목록_조회() {
+        return RestAssured
+                .given().log().all()
+                .when()
+                    .get("/lines")
+                .then().log().all().extract();
+    }
 }
