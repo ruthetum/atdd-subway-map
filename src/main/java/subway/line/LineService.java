@@ -74,13 +74,7 @@ public class LineService {
     public List<LineResponse> findAllLines() {
         return lineRepository.findAll().stream()
                 .map(line -> {
-                    var sections = sectionRepository.findAllByLineId(line.getId());
-                    var stations = stationRepository.findAllById(
-                            sections.stream()
-                                    .flatMap(section -> section.getStationIds().stream())
-                                    .collect(Collectors.toList())
-                    );
-
+                    var stations = this.getStationsFromLine(line);
                     return new LineResponse(
                             line.getId(),
                             line.getName(),
@@ -91,5 +85,28 @@ public class LineService {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    public LineResponse findLineById(Long id) {
+        Line line = lineRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 노선입니다."));
+        var stations = this.getStationsFromLine(line);
+        return new LineResponse(
+                line.getId(),
+                line.getName(),
+                line.getColor(),
+                stations.stream()
+                        .map(station -> new LineResponse.StationDto(station.getId(), station.getName()))
+                        .collect(Collectors.toList())
+        );
+    }
+
+    public List<Station> getStationsFromLine(Line line) {
+        var sections = sectionRepository.findAllByLineId(line.getId());
+        return stationRepository.findAllById(
+                sections.stream()
+                        .flatMap(section -> section.getStationIds().stream())
+                        .collect(Collectors.toList())
+        );
     }
 }
