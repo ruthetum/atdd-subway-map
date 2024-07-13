@@ -1,13 +1,13 @@
 package subway.line;
 
-public class LineRequest {
+public class CreateLineRequest {
     private final String name;
     private final String color;
     private final Long upStationId;
     private final Long downStationId;
     private final int distance;
 
-    public LineRequest() {
+    public CreateLineRequest() {
         this.name = null;
         this.color = null;
         this.upStationId = 0L;
@@ -15,7 +15,7 @@ public class LineRequest {
         this.distance = 0;
     }
 
-    public LineRequest(String name, String color, Long upStationId, Long downStationId, int distance) {
+    public CreateLineRequest(String name, String color, Long upStationId, Long downStationId, int distance) {
         this.name = name;
         this.color = color;
         this.upStationId = upStationId;

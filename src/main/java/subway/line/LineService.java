@@ -8,7 +8,6 @@ import subway.station.StationRepository;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,7 +25,7 @@ public class LineService {
     }
 
     @Transactional
-    public LineResponse saveLine(LineRequest request) {
+    public LineResponse saveLine(CreateLineRequest request) {
         // 지하철역 조회 (upStationId, downStationId)
         var targetStationIds = List.of(request.getUpStationId(), request.getDownStationId());
         var stations = stationRepository.findAllById(targetStationIds);

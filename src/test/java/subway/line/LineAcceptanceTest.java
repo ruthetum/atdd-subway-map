@@ -107,7 +107,7 @@ public class LineAcceptanceTest extends ApiTest {
     @Test
     void showLine() {
         //given
-        var 신분당선 = 신분당선_등록("신분당선", "bg-red-600");
+        var 신분당선 = 지하철_노선_상하행역_등록("신분당선", "bg-red-600");
         var 신분당선_ID = 신분당선.getLeft();
         var 강남역_ID = 신분당선.getMiddle();
         var 신논현역_ID = 신분당선.getRight();
@@ -129,7 +129,17 @@ public class LineAcceptanceTest extends ApiTest {
     @DisplayName("지하철 노선을 수정한다")
     @Test
     void updateLine() {
-        // TODO: 지하철 노선 수정
+        // given
+        var 신분당선 = 지하철_노선_상하행역_등록("신분당선", "bg-red-600");
+        var 신분당선_ID = 신분당선.getLeft();
+
+        // when
+        지하철_노선_수정(신분당선_ID, "분당선", "bg-yellow-500");
+
+        // then
+        var 수정된_신분당선 = 지하철_노선_조회(신분당선_ID).jsonPath().getObject("", LineResponse.class);
+        assertThat(수정된_신분당선.getName()).isEqualTo("분당선");
+        assertThat(수정된_신분당선.getColor()).isEqualTo("bg-yellow-500");
     }
 
     /**
@@ -147,7 +157,7 @@ public class LineAcceptanceTest extends ApiTest {
      * 지하철 노선과 노선 등록에 필요한 지하철역을 생성하는 메서드
      * @return <노선 ID, 상행역 ID, 하행역 ID>
      */
-    private Triple<Long, Long, Long> 신분당선_등록(String name, String color) {
+    private Triple<Long, Long, Long> 지하철_노선_상하행역_등록(String name, String color) {
         var 상행역 = 지하철역_생성(지하철역_생성_요청("상행역"));
         var 상행역_ID = 상행역.jsonPath().getLong("id");
         var 하행역 = 지하철역_생성(지하철역_생성_요청("하행역"));
