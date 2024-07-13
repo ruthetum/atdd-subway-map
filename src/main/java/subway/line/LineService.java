@@ -25,7 +25,7 @@ public class LineService {
     }
 
     @Transactional
-    public CreateLineResponse saveLine(CreateLineRequest request) {
+    public LineResponse saveLine(LineRequest request) {
         // 지하철역 조회 (upStationId, downStationId)
         var targetStationIds = List.of(request.getUpStationId(), request.getDownStationId());
         var stations = stationRepository.findAllById(targetStationIds);
@@ -50,16 +50,16 @@ public class LineService {
             .collect(Collectors.toMap(Station::getId, Function.identity()));
 
         // 현재는 상행역, 하행역 2개로 고정해서 반환한다
-        return new CreateLineResponse(
+        return new LineResponse(
                 line.getId(),
                 line.getName(),
                 line.getColor(),
                 List.of(
-                    new CreateLineResponse.StationDto(
+                    new LineResponse.StationDto(
                         findStationMap.get(request.getUpStationId()).getId(),
                         findStationMap.get(request.getUpStationId()).getName()
                     ),
-                    new CreateLineResponse.StationDto(
+                    new LineResponse.StationDto(
                         findStationMap.get(request.getDownStationId()).getId(),
                         findStationMap.get(request.getDownStationId()).getName()
                     )

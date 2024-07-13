@@ -2,7 +2,7 @@ package subway.line;
 
 import java.util.List;
 
-public class CreateLineResponse {
+public class LineResponse {
 
     public static class StationDto {
         private Long id;
@@ -30,10 +30,10 @@ public class CreateLineResponse {
     private String color;
     private List<StationDto> stations;
 
-    public CreateLineResponse() {
+    public LineResponse() {
     }
 
-    public CreateLineResponse(Long id, String name, String color, List<StationDto> stations) {
+    public LineResponse(Long id, String name, String color, List<StationDto> stations) {
         this.id = id;
         this.name = name;
         this.color = color;

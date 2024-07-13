@@ -7,20 +7,20 @@ import org.springframework.http.MediaType;
 
 public class LineSteps {
 
-    public static CreateLineRequest 지하철_노선_생성_요청(
+    public static LineRequest 지하철_노선_생성_요청(
             String name,
             String color,
             Long upStationId,
             Long downStationId,
             int distance
     ) {
-        return new CreateLineRequest(name, color, upStationId, downStationId, distance);
+        return new LineRequest(name, color, upStationId, downStationId, distance);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_생성(CreateLineRequest createLineRequest) {
+    public static ExtractableResponse<Response> 지하철_노선_생성(LineRequest lineRequest) {
         return RestAssured
                 .given().log().all()
-                    .body(createLineRequest)
+                    .body(lineRequest)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                     .post("/lines")

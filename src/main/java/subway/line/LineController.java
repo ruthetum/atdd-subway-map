@@ -17,10 +17,10 @@ public class LineController {
     }
 
     @PostMapping("/lines")
-    public ResponseEntity<CreateLineResponse> createLine(
-            @RequestBody CreateLineRequest request
+    public ResponseEntity<LineResponse> createLine(
+            @RequestBody LineRequest request
     ) {
-        CreateLineResponse newLine = lineService.saveLine(request);
+        LineResponse newLine = lineService.saveLine(request);
         return ResponseEntity.created(URI.create("/stations/" + newLine.getId())).body(newLine);
     }
 }
