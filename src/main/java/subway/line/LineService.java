@@ -108,4 +108,11 @@ public class LineService {
                         .collect(Collectors.toList())
         );
     }
+
+    @Transactional
+    public void updateLine(Long id, UpdateLineRequest request) {
+        Line line = lineRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 노선입니다."));
+        line.update(request.getName(), request.getColor());
+    }
 }
