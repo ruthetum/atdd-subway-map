@@ -5,6 +5,7 @@ import org.hibernate.annotations.Comment;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "line")
 public class Line {
     @Comment("지하철 노선 ID")
     @Id
