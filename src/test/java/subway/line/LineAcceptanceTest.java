@@ -1,6 +1,5 @@
 package subway.line;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -38,18 +37,8 @@ public class LineAcceptanceTest extends ApiTest {
 
         // then
         assertThat(신분당선.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-
-        var 지하철_노선_이름 = 신분당선.jsonPath().getString("name");
-        assertThat(지하철_노선_이름).isEqualTo("신분당선");
-
-        var 지하철_노선_색 = 신분당선.jsonPath().getString("color");
-        assertThat(지하철_노선_색).isEqualTo("bg-red-600");
-
-        var 지하철_노선_상행역_ID = 신분당선.jsonPath().getList("stations", LineResponse.StationDto.class).get(0).getId();
-        assertThat(지하철_노선_상행역_ID).isEqualTo(강남역_ID);
-
-        var 지하철_노선_하행역_ID = 신분당선.jsonPath().getList("stations", LineResponse.StationDto.class).get(1).getId();
-        assertThat(지하철_노선_하행역_ID).isEqualTo(신논현역_ID);
+        var 등록된_신분당선 = 신분당선.jsonPath().getObject("", LineResponse.class);
+        등록된_노선_정보_확인(등록된_신분당선, "신분당선", "bg-red-600", 강남역_ID, 신논현역_ID);
     }
 
     /**
@@ -91,17 +80,20 @@ public class LineAcceptanceTest extends ApiTest {
                 .filter(line -> line.getName().equals("신분당선"))
                 .findFirst()
                 .orElseThrow();
-        assertThat(등록된_신분당선.getColor()).isEqualTo("bg-red-600");
-        assertThat(등록된_신분당선.getStations().get(0).getId()).isEqualTo(강남역_ID);
-        assertThat(등록된_신분당선.getStations().get(1).getId()).isEqualTo(신논현역_ID);
+        등록된_노선_정보_확인(등록된_신분당선, "신분당선", "bg-red-600", 강남역_ID, 신논현역_ID);
 
         var 등록된_수도권_2호선 = 지하철_노선_목록.jsonPath().getList("", LineResponse.class).stream()
                 .filter(line -> line.getName().equals("2호선"))
                 .findFirst()
                 .orElseThrow();
-        assertThat(등록된_수도권_2호선.getColor()).isEqualTo("bg-green-600");
-        assertThat(등록된_수도권_2호선.getStations().get(0).getId()).isEqualTo(강남역_ID);
-        assertThat(등록된_수도권_2호선.getStations().get(1).getId()).isEqualTo(역삼역_ID);
+        등록된_노선_정보_확인(등록된_수도권_2호선, "2호선", "bg-green-600", 강남역_ID, 역삼역_ID);
+    }
+
+    private void 등록된_노선_정보_확인(LineResponse response, String name, String color, Long upStationId, Long downStationId) {
+        assertThat(response.getName()).isEqualTo(name);
+        assertThat(response.getColor()).isEqualTo(color);
+        assertThat(response.getStations().get(0).getId()).isEqualTo(upStationId);
+        assertThat(response.getStations().get(1).getId()).isEqualTo(downStationId);
     }
 
     /**
