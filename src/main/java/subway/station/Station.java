@@ -1,8 +1,9 @@
-package subway;
+package subway.station;
 
 import javax.persistence.*;
 
 @Entity
+@Table(name = "station")
 public class Station {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
